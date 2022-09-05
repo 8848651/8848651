@@ -1,0 +1,99 @@
+package use;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+public class CDPRTest {
+	//增
+	public void zeng(user u)
+	{
+		Connection conn=null;
+		PreparedStatement past=null;
+		conn=JDBCTest.getConnection();
+		String sql="insert into student(son,sname,MM)values(?,?,?)";
+		try {
+			past=conn.prepareStatement(sql);
+			past.setString(1, u.getSon());
+			past.setString(2, u.getUsemane());
+			past.setString(3, u.getPwd());
+			int resoult=past.executeUpdate();
+			System.out.println(resoult);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		finally{
+			JDBCTest.close(conn, past, null);
+		}
+	}
+	//删
+	public void shan(String sno)
+	{
+		Connection conn=null;
+		PreparedStatement past=null;
+		conn=JDBCTest.getConnection();
+		String sql="delete from student where son=?";
+		try {
+			past=conn.prepareStatement(sql);
+			past.setString(1,sno);
+			int resoult=past.executeUpdate();
+			System.out.println(resoult);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally{
+			JDBCTest.close(conn, past, null);
+		}
+	}
+	//改
+	public void gai(user u)
+	{
+		Connection conn=null;
+		PreparedStatement past=null;
+		conn=JDBCTest.getConnection();
+		String sql="update student set pwd=? where son=? ";
+		try {
+			past=conn.prepareStatement(sql);
+			past.setString(1, u.getPwd());	
+			past.setString(2, u.getSon());
+			int resoult=past.executeUpdate();
+			System.out.println(resoult);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally{
+			JDBCTest.close(conn, past, null);
+		}
+	}
+	//查
+	public user chaxun(String sno)
+	{
+		user c=null;
+		Connection conn=null;
+		PreparedStatement past=null;
+		ResultSet rs=null;
+		conn=JDBCTest.getConnection();
+		String sql="select* from student where son=?";
+		try {
+			past=conn.prepareStatement(sql);
+			past.setString(1, sno);		
+			rs=past.executeQuery();					
+			if(rs.next())
+			{
+				c=new user();
+				String a=rs.getString(2);
+				c.setPwd(a);
+				String b=rs.getNString(1);
+				c.setUsemane(b);
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally{
+			JDBCTest.close(conn, past, rs);
+		}
+		return c;
+	}
+}
