@@ -1,0 +1,38 @@
+package use;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+public class usedao {
+	private PreparedStatement past;
+	private  ResultSet rs;
+	private  Connection conn;
+	public user login(user user)
+	{	
+		user user1=null;		
+		conn=JDBCTest.getConnection();
+		String sql="select* from student where son=? and MM=?";
+		try {
+			past=conn.prepareStatement(sql);
+			past.setString(1, user.getSon());			
+			past.setString(2, user.getPwd());
+			rs=past.executeQuery();
+			if(rs.next())
+			{
+				user1=new user();
+				String a=rs.getString(1);
+				user1.setSon(a);
+				String c=rs.getString(2);
+				user1.setUsemane(c);
+				String b=rs.getString(3);
+				user1.setPwd(b);
+			}		
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	return user1;
+	}	
+}
