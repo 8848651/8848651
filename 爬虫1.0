@@ -1,0 +1,20 @@
+import requests
+import csv
+from pyquery import PyQuery
+url = 'https://book.douban.com/'
+headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/104.0.5112.102 Safari/537.36 Edg/104.0.1293.70'}
+resp = requests.get(url, headers=headers)
+doc =PyQuery(resp.text)
+doc0=doc.items('.more-meta')
+csvf=open('C:/Users/86151/PycharmProjects/pythonProject/Data/dianp.csv','a+',encoding='utf-8',newline='')
+fieldnames=['a0','a1','a2','a3']
+writer=csv.DictWriter(csvf,fieldnames=fieldnames)
+writer.writeheader()
+for pop in doc0:
+    a0 = pop('.title').text()
+    a1 = pop('.author').text()
+    a2 = pop('.year').text()
+    a3 = pop('.publisher').text()
+    data = {'a0': a0, 'a1': a1,'a2': a2, 'a3': a3}
+    writer.writerow(data)
+csvf.close()
