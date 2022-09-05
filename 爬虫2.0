@@ -1,0 +1,22 @@
+import requests
+import csv
+from pyquery import PyQuery
+url = 'https://www.89ip.cn/'
+headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/104.0.5112.102 Safari/537.36 Edg/104.0.1293.70'}
+resp = requests.get(url, headers=headers)
+doc =PyQuery(resp.text)
+doc0=doc.items('tr')
+csvf=open('C:/Users/86151/PycharmProjects/pythonProject/Data/dianp4.csv','a+',encoding='utf-8',newline='')
+fieldnames=['a0','a1','a2','a3','a4']
+writer=csv.DictWriter(csvf,fieldnames=fieldnames)
+writer.writeheader()
+for pip in doc0:
+    a0 = pip('td').eq(0).text()
+    a1 = pip('td').eq(1).text()
+    a2 = pip('td').eq(2).text()
+    a3 = pip('td').eq(3).text()
+    a4 = pip('td').eq(4).text()
+    data = {'a0': a0, 'a1': a1, 'a2': a2, 'a3': a3,'a4':a4}
+    writer.writerow(data)
+csvf.close()
+
