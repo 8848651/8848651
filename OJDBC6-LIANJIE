@@ -1,0 +1,35 @@
+package cn.itcast.oracle.test;
+
+        import oracle.jdbc.OracleTypes;
+        import java.sql.CallableStatement;
+        import java.sql.Connection;
+        import java.sql.DriverManager;
+
+public class jdbctest {
+    public static void main(String[] args) throws Exception {
+        //加载驱动
+        //Class.forName("oracle.jdbc.driver.OracleDriver");
+        Class.forName("oracle.jdbc.driver.OracleDriver");
+        //StandardOp.SpillRegistersOp.setProperty("driver", "com.mysql.jdbc.Driver");
+        //获取连接对象
+        String url="jdbc:oracle:thin:@localhost:1521:xe";
+        String use="use1";
+        String password="use1";
+        Connection conn=DriverManager.getConnection(url,use,password);
+        //获得语句对象
+        String sql="{call USE1(?,?)}";
+        CallableStatement call= conn.prepareCall(sql);
+        //设置输入参数
+        call.setString(1,"3");
+        //注册输出参数
+        call.registerOutParameter(2,OracleTypes.NUMBER);
+        //执行存储过程
+        call.execute();
+        int s=call.getInt(2);
+        System.out.println(s);
+        //释放资源
+        call.close();
+        conn.close();
+    }
+}
+
