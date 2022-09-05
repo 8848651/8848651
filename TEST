@@ -1,0 +1,25 @@
+package use;
+
+public class test {
+	public static boolean isempty(String str)
+	{
+		if(str==null||"".equals(str.trim()))
+		{
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+	public static boolean isNoempty(String str)
+	{
+		if(str!=null&&!"".equals(str.trim()))
+		{
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+}
+//用来判断输入的值是否为空
