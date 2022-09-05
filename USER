@@ -1,0 +1,42 @@
+package use;
+
+public class user {
+ private String usemane;
+ private String son;
+ private String pwd;
+public String getUsemane() {
+	return usemane;
+}
+public void setUsemane(String usemane) {
+	this.usemane = usemane;
+}
+public String getPwd() {
+	return pwd;
+}
+public void setPwd(String pwd) {
+	this.pwd = pwd;
+}
+public user(String sno,String pwd)
+{
+	super();
+	this.pwd=pwd;
+	this.son=sno;	
+	}
+public user(String sno,String pwd,String  usemane)
+{
+	super();
+	this.pwd=pwd;
+	this.son=sno;
+	this.usemane=usemane;
+	}
+public user()
+{
+	super();
+	}
+public String getSon() {
+	return son;
+}
+public void setSon(String son) {
+	this.son = son;
+}
+}
