@@ -1,0 +1,110 @@
+
+"""1.查找列表和元组中以a或A开头并且以c 结尾的所有元素。
+li = ["alec", " aric", "Alex", "Tony", "rain"]
+tu = ('alec', ' aric', 'Alex', 'Tony', 'rain')
+list1=list(tu)
+import re
+def fun(li):
+    mylist = []
+    for i in li:
+        result = i.strip()
+        choose = ''.join(re.findall('^[aA].*c$', result))
+        if choose != '':
+            mylist.append(choose)
+    return mylist
+print(fun(list1))
+"""
+"""2编写程序，生成一个包含10个[0,100]范围内的随机整数的列表，然后对其中偶数下标的元素进行降序排列，奇数下标的元素不变
+import random
+a=[]
+b=[]
+y = [random.randint(0,100) for i in range(10)]
+print(y)
+for i in range(len(y)):
+    if y[i] % 2 == 0:
+       a=y[i]
+print(a)
+"""
+"""3ls是一个列表，内容如下：ls = [123, '456', 789, '123', 456, '798']，求其各整数元素的和
+m=0
+l = [123, '456', 789, '123', 456, '798']
+for i in range(len(l)):
+     if isinstance(l[i],int):
+          m=m+l[i]
+print(m)
+"""
+"""4有如下值集合 [11,22,33,44,55,66,77,88,99]，将所有大于 66 的值以列表的形式保存至字典的第一个key中，将小于 66 的值以列表的形式保存至第二个key的值中。
+li=[11,22,33,44,55,66,77,88,99]
+a = {">66":[],"<=66":[]}
+for i,j in enumerate(li,0) :
+    if int(j) > 66 :
+        a[">66"].append(j)
+    else :
+        a["<=66"].append(j)
+print(a)
+"""
+"""5.数字重复统计：随机生成10个[20，100]间的整数，升序输出所有不同的数字及每个数字重复的次数。
+import random
+scores = []
+num = {}
+for i in range(10):				
+    scores.append(random.randint(20, 100))
+scores.sort()
+for i in scores:
+    counts = scores.count(i)
+    num[i] = counts
+print('数字\t\t\t出现次数')
+for key in num:
+    print('%s\t\t\t%s' %(key,num[key]))
+"""
+"""6将英语单词用小写字母表示，并删除单词后缀er,ly,ing。例如：若输入单词：playing，输出为：play
+a=input()
+b=list(reversed(a))
+if b[0]=='g'and b[1]=='n'and b[2]=='i':
+    del(b[0])
+    del(b[0])
+    del(b[0])
+if b[0] == 'y' and b[1] == 'l':
+    del (b[0])
+    del (b[0])
+if b[0] == 'r' and b[1] == 'e':
+    del (b[0])
+    del (b[0])
+c=list(reversed(b))
+str=''.join(c)
+print(str)
+"""
+"""7用户输入小写字母组成的字符串，对该字符串加密，规则是：a-z分别对应01-26,输出加密后的字符串。例如：若输入字符串abc,则输出为010203
+a=input()
+b=list(a)
+c= []
+for i in range(len(b)):
+    c.append(ord(b[i])-96)
+c1=[str(i) for i in c]
+for i in range(len(c1)):
+    if int(int(c1[i])/10)==0:
+        c1[i]='0'+c1[i]
+str = ''.join(c1)
+print(str)
+"""
+"""9编写程序，输入若干个整数，输出由奇数和与偶数和组成的新列表。例如，输入1,2,3,4，输出[4, 6]。
+a=input()
+b=list(a)
+m=0
+n=0
+c1=[]
+c=[int(i) for i in b]
+for i in range(len(c)):
+    if c[i]%2==0:
+        n=n+c[i]
+    else:
+        m=m+c[i]
+c1.append(n)
+c1.append(m)
+print(c1)
+"""
+"""10编写程序，输入一个包含多个逗号的字符串，删除其中的逗号，然后输出处理后的字符串。
+string = input(":")
+new_string = string.replace(",", "")
+print(new_string)
+"""
