@@ -1,0 +1,101 @@
+"""
+    input_data.py: 读取训练数据
+"""
+import tensorflow as tf
+import numpy as np
+import os
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
+
+file_dir='./data/train/train/'
+# 建立空列表
+cats = []           # 存放是猫的图片路径地址
+label_cats = []     # 对应猫图片的标签
+dogs = []           # 存放是猫的图片路径地址
+label_dogs = []     # 对应狗图片的标签
+
+for file in os.listdir(file_dir):     # file就是要读取的图片带后缀的文件名
+    name = file.split(sep='.')        # 图片格式是cat.1.jpg / dog.2.jpg, 处理后name为[cat, 1, jpg]
+    if name[0] == 'cat':              # name[0]获取图片名
+        cats.append(file_dir + file)  # 若是cat，则将该图片路径地址添加到cats数组里
+        label_cats.append(0)          # 并且对应的label_cats添加0标签 （这里记作：0为猫，1为狗）
+    else:
+        dogs.append(file_dir + file)
+        label_dogs.append(1)          # 注意：这里添加进的标签是字符串格式，后面会转成int类型
+
+image_list = np.hstack((cats, dogs))               # 在水平方向平铺合成一个行向量，即两个数组的拼接
+label_list = np.hstack((label_cats, label_dogs))   # 这里把猫狗图片及标签合并分别存在image_list和label_list
+temp = np.array([image_list, label_list])  # 生成一个2 X 25000的数组，即2行、25000列
+temp = temp.transpose()                    # 转置向量，大小变成25000 X 2
+np.random.shuffle(temp)                    # 乱序，打乱这25000行排列的顺序
+image = list(temp[:, 0])              # 所有行，列=0（选中所有猫狗图片路径地址），即重新存入乱序后的猫狗图片路径
+label_list = list(temp[:, 1])              # 所有行，列=1（选中所有猫狗图片对应的标签），即重新存入乱序后的对应标签
+label = [int(float(i)) for i in label_list]  # 把标签列表转化为int类型（用列表解析式迭代，相当于精简的for循环）
+
+image = tf.cast(image, tf.string)   # 将列表转换成tf能够识别的格式
+label = tf.cast(label, tf.int32)
+
+
+input_queue = tf.train.slice_input_producer([image, label])
+
+label = input_queue[1]
+
+
+image_contents = tf.read_file(input_queue[0])              # 图像的读取需要tf.read_file(), 标签则可以直接赋值。
+mage = tf.image.decode_jpeg(image_contents, channels=3)   # 使用JPEG的格式解码从而得到图像对应的三维矩。
+
+#image = tf.image.resize_images(image, [208, 208], method=tf.image.ResizeMethod.NEAREST_NEIGHBOR)
+image = tf.image.resize_images(mage, [208, 208], method=0)
+
+image = tf.cast(image, tf.float32)  # 将image转换成float32类型
+
+image = tf.image.per_image_standardization(image)  # 图片标准化处理，加速神经网络的训练
+
+
+image_batch, label_batch = tf.train.batch([image, label],          # 进队列的tensor列表数据
+                                              batch_size=64,   # 设置每次从队列中获取出队数据的数量
+                                              num_threads=64,          # 涉及到线程，配合队列
+                                              capacity=100)       # 用来设置队列中元素的最大数量
+with tf.Session() as sess:
+    # 定义一个线程协调器
+    coord = tf.train.Coordinator()
+    # 开启读文件的线程
+    threads = tf.train.start_queue_runners(sess, coord=coord)
+    try:
+        for step in np.arange(2):
+            if coord.should_stop():
+                break
+            else:
+             img_data1 = sess.run(image_batch)
+             img_data2 = sess.run(label_batch)
+             #print(img_data1)
+             print(img_data2)
+    except tf.errors.OutOfRangeError:
+        print('Done training -- epoch limit reached')
+    finally:
+        coord.request_stop()   # 停止所有线程
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
